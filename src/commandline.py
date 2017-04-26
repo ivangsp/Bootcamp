@@ -78,24 +78,23 @@ class DojoCLI(cmd.Cmd):
         list_room_names = args['<room_name>']
         for room in list_room_names:
             output = mydojo.create_room(room_type, room)
-            if output == True:
-                print("An {} called {} has been successfully created!".format(room_type, room))
-
-
+            print(output)
+            # if output:
+            #     print("An {} called {} has been successfully created!".format(room_type, room))
     @docopt_cmd
     def do_add_person(self, args):
 
-        """Usage: add_person<person_name> <FELLOW-STAFF>[<wants_accommodation>]
+        """Usage: add_person <person_name> <FELLOW-STAFF> [<wants_accommodation>]
         """
         person_name = args['<person_name>']
         person_type = args['<FELLOW-STAFF>']
         wants_accommodation = args['<wants_accommodation>']
-        mydojo.add_person(person_name, person_type, wants_accommodation)
-
-    #command to print people in the room
+        output = mydojo.add_person(person_name, person_type, wants_accommodation)
+        print("{}, {} has been successfully added.".format(person_type, person_name))
+        print(output)
+        
     @docopt_cmd
     def do_print_person(self, args):
-
         """Usage: print_room <room_name>
         """
         room_name = args['<room_name>']

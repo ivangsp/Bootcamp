@@ -7,11 +7,11 @@ class Validation():
                 if room_type == "office" or room_type == "livingroom":
                     return room_type
                 else:
-                    raise ValueError("error")
+                    raise ValueError()
             else:
-                raise TypeError(" error")
+                raise TypeError()
         else:
-            raise TypeError(" error")
+            raise TypeError()
 
     #check if room name entered is a string and not empty
     def check_room_name(self, room_name):
@@ -20,23 +20,34 @@ class Validation():
             if isinstance(room_name, str):
                 return room_name
             else:
-                raise TypeError(" error")
+                raise TypeError()
         else:
-            raise TypeError(" error")
+            raise TypeError()
 
     def check_personType(self, person_type):
         if person_type is not None:
             #check if its a string
             if isinstance(person_type, str):
+                person_type = person_type.lower()
                 #check if Person_type is either a fellow or staff
-                if person_type == "Fellow" or person_type == "Staff":
+                if person_type == "fellow" or person_type == "staff":
                     return person_type
                 else:
-                    raise ValueError("error")
+                    raise ValueError()
             else:
-                raise TypeError(" error")
+                raise TypeError()
         else:
             raise ValueError()
+
+    def check_accomdoation(self, arg):
+        if arg is not None:
+            if isinstance(arg, str):
+                arg = arg.lower()
+                if arg == 'yes':
+                    return True
+                else:
+                    return False
+        return False
 
     #check if person name entered is a string and not empty
     def check_person_name(self, person_name):
@@ -46,9 +57,9 @@ class Validation():
             if isinstance(person_name, str):
                 return person_name
             else:
-                raise TypeError(" error")
+                raise TypeError()
         else:
-            raise TypeError(" error")
+            raise TypeError()
 
 
 
