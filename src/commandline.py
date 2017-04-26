@@ -26,7 +26,8 @@ import cmd
 from docopt import docopt, DocoptExit
 from dojo import Dojo
 
-mydojo  = Dojo()
+mydojo = Dojo()
+
 
 def docopt_cmd(func):
     """
@@ -62,71 +63,71 @@ def intro():
 
     print(__doc__)
 
+
 class DojoCLI(cmd.Cmd):
-   intro = "Welcome to my interactive program type help for a list of commands!"
+    intro = "Welcome to my interactive program type help for a list of commands!"
+    prompt = '(dojo) '
 
-   prompt = '(dojo) '
+    file = None
 
-   file = None
+    @docopt_cmd
+    def do_create_room(self, args):
+        """Usage: create_room <room_type> <room_name>... """
 
-   @docopt_cmd
-   def do_create_room(self, args):
+        room_type = args['<room_type>']
+        list_room_names = args['<room_name>']
+        for room in list_room_names:
+            output = mydojo.create_room(room_type, room)
+            if output == True:
+                print("An {} called {} has been successfully created!".format(room_type, room))
 
-       """Usage: create_room <room_type> <room_name>... """
 
-       room_type = args['<room_type>']
-       list_room_names = args['<room_name>']
-       for room in list_room_names:
-        print("An {} called {} has been successfully created!".format(room_type,room))
-       mydojo.create_room(room_type,list_room_names)
+    @docopt_cmd
+    def do_add_person(self, args):
 
-   @docopt_cmd
-   def do_add_person(self, args):
-
-       """Usage: add_person <person_name> <FELLOW-STAFF> [<wants_accommodation>]
-       """
-       person_name         = args['<person_name>']
-       person_type         = args['<FELLOW-STAFF>']
-       wants_accommodation = args['<wants_accommodation>']
-       mydojo.add_person(person_name,person_type,wants_accommodation)
+        """Usage: add_person<person_name> <FELLOW-STAFF>[<wants_accommodation>]
+        """
+        person_name = args['<person_name>']
+        person_type = args['<FELLOW-STAFF>']
+        wants_accommodation = args['<wants_accommodation>']
+        mydojo.add_person(person_name, person_type, wants_accommodation)
 
     #command to print people in the room
-   @docopt_cmd
-   def do_print_person(self, args):
+    @docopt_cmd
+    def do_print_person(self, args):
 
-       """Usage: print_room <room_name>
-       """
-       room_name = args['<room_name>']
+        """Usage: print_room <room_name>
+        """
+        room_name = args['<room_name>']
+        mydojo.print_people_in_room(room_name)
 
     #prints a list of people with the rooms allocated to them
-   @docopt_cmd
-   def do_print_allocations(self, args):
-       """Usage: print_allocations [<filename>]
-       """
-       filename =args['<filename>']
-       mydojo.print_allocations(filename)
+    @docopt_cmd
+    def do_print_allocations(self, args):
+        """Usage: print_allocations [<filename>]
+        """
+        filename = args['<filename>']
+        mydojo.print_allocations(filename)
 
    #prints a list of people with the rooms allocated to them
-   @docopt_cmd
-   def do_print_unallocated(self, args):
-       """Usage: print_unallocated [<filename>]
-       """
-       filename =args['<filename>']
-       mydojo.print_unallocated_people(filename) 
+    @docopt_cmd
+    def do_print_unallocated(self, args):
+        """Usage: print_unallocated [<filename>]
+        """
+        filename = args['<filename>']
+        mydojo.print_unallocated_people(filename)
 
+    def do_quit(self, arg):
 
+        """Quits out of Interactive Mode."""
 
-   def do_quit(self, arg):
-
-       """Quits out of Interactive Mode."""
-
-       print('Good Bye!')
-
-       exit()
+        print('Good Bye!')
+        exit()
 
 opt = docopt(__doc__, sys.argv[1:])
 
 DojoCLI().cmdloop()
+
 
 
 

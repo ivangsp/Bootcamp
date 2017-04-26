@@ -1,53 +1,55 @@
 class Validation():
+    def check_room_type(self, room_type):
+        #check if arg person_type is not empty
+        if room_type is not None:
+            if isinstance(room_type, str):
+                room_type = room_type.lower()
+                if room_type == "office" or room_type == "livingroom":
+                    return room_type
+                else:
+                    raise ValueError("error")
+            else:
+                raise TypeError(" error")
+        else:
+            raise TypeError(" error")
 
-	#check if room Type Entered is Either an oofice or LivingRoom
-	def check_room_type(self,room_type):
-		#check if arg person_type is not empty
-		if person_type!=None:
-			if isinstance(room_type, str):#check if its a string
-				if room_type=="office" or room_type=="livingRoom": 
-					return room_type
-				else:
-					raise ValueError("error")
-			else:
-				raise TypeError(" error")
-		else:
-			raise TypeError(" error")
+    #check if room name entered is a string and not empty
+    def check_room_name(self, room_name):
+        #check if room name  is not empty
+        if room_name is not None:
+            if isinstance(room_name, str):
+                return room_name
+            else:
+                raise TypeError(" error")
+        else:
+            raise TypeError(" error")
 
-	#check if room name entered is a string and not empty
-	def check_room_name(self,room_name):
-		#check if room name  is not empty
-		if room_name!=None:
-			if isinstance(room_name, str):#check if its a string
-				return room_name
-			else:
-				raise TypeError(" error")
-		else:
-			raise TypeError(" error")
+    def check_personType(self, person_type):
+        if person_type is not None:
+            #check if its a string
+            if isinstance(person_type, str):
+                #check if Person_type is either a fellow or staff
+                if person_type == "Fellow" or person_type == "Staff":
+                    return person_type
+                else:
+                    raise ValueError("error")
+            else:
+                raise TypeError(" error")
+        else:
+            raise ValueError()
 
-	def check_personType(self,person_type):
-		#check if arg person_type is not empty
-		if person_type!=None:
-			if isinstance(person_type, str):#check if its a string
-				if person_type=="Fellow" or person_type=="Staff": #check if Person_type is either a fellow or staff
-					return person_type
-				else:
-					raise ValueError("error")
-			else:
-				raise TypeError(" error")
-		else:
-			raise ValueError
+    #check if person name entered is a string and not empty
+    def check_person_name(self, person_name):
+        #check if room name  is not empty
+        if person_name is not None:
+            #check if its a string
+            if isinstance(person_name, str):
+                return person_name
+            else:
+                raise TypeError(" error")
+        else:
+            raise TypeError(" error")
 
-	#check if person name entered is a string and not empty
-	def check_person_name(self,person_name):
-		#check if room name  is not empty
-		if person_name!=None:
-			if isinstance(room_name, str):#check if its a string
-				return person_name
-			else:
-				raise TypeError(" error")
-		else:
-			raise TypeError(" error")
 
 
 
