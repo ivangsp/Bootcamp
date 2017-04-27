@@ -22,10 +22,9 @@ Options:
 """
 
 import sys
-import os
 import cmd
 from docopt import docopt, DocoptExit
-from dojo import Dojo
+from main import Dojo
 
 mydojo = Dojo()
 
@@ -78,10 +77,9 @@ class DojoCLI(cmd.Cmd):
         room_type = args['<room_type>']
         list_room_names = args['<room_name>']
         for room in list_room_names:
-            output = mydojo.create_room(room_type, room)
-            print(output)
-            # if output:
-            #     print("An {} called {} has been successfully created!".format(room_type, room))
+            mydojo.create_room(room_type, room)
+            print("An {} called {} has been successfully created!".format(room_type, room))
+           
     @docopt_cmd
     def do_add_person(self, args):
 
@@ -91,8 +89,14 @@ class DojoCLI(cmd.Cmd):
         person_type = args['<FELLOW-STAFF>']
         wants_accommodation = args['<wants_accommodation>']
         output = mydojo.add_person(person_name, person_type, wants_accommodation)
+        office_name = output['office_name']
+        living_room = output['livingroom']
         print("{}, {} has been successfully added.".format(person_type, person_name))
-        print(output)
+        print("{}, has been allocated office {} ".format(person_name, office_name))
+
+        if person_type == "fellow":
+            if living_room is not None:
+                print("{}, has been allocated livingroom {} ".format(person_name, living_room))
         
     @docopt_cmd
     def do_print_person(self, args):

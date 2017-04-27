@@ -1,5 +1,9 @@
 from validation_class import Validation
-from classes import Office, LivingRoom, Fellow, Staff
+from classes.class_livingroom import LivingRoom
+from classes.class_office import Office
+
+from classes.class_fellow import Fellow
+from classes.class_staff import Staff
 
 
 class Dojo():
@@ -21,7 +25,7 @@ class Dojo():
             office = Office(room_name)
             #add that office to the database
             office.add_room_to_db(room_type)
-            
+
             self.all_offices.append(office)
             self.all_rooms.append(office)
             output = True
@@ -44,10 +48,10 @@ class Dojo():
 
         if person_type == "fellow":
             person = Fellow(person_name)
-            return(person.add_fellow(self.all_offices, self.all_living_rooms, accomodation))
+            output = person.add_fellow(self.all_offices, self.all_living_rooms, accomodation)
+            return output
 
         else:
             person = Staff(person_name)
             return (person.add_staff(self.all_offices))
-            
-            
+        
