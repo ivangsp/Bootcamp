@@ -1,9 +1,14 @@
 import random
+from create_db import Database
 
 
 class Person(object):
     def ___init__(self, person_name):
         self.person_name = person_name
+
+    def add_person_to_db(self, person_type, office_name=None, livingroom=None):
+        db = Database()
+        db.add_person(self.person_name, person_type, office_name, livingroom)
 
 
 class Fellow(Person):
@@ -16,8 +21,10 @@ class Fellow(Person):
         output = {}
         output['person_name'] = self.person_name
         output['office_name'] = self.assign_officeroom(all_offices)
+        output['person_type'] = 'fellow'
         if self.accomodation:
             output['livingroom'] = self.assign_livingroom(all_livingrooms)
+            self.add_person_to_db('fellow', output['office_name'], output['livingroom'])
         return output
 
     def assign_livingroom(self, all_livingrooms):
@@ -58,6 +65,8 @@ class Staff(Person):
         output = {}
         output['person_name'] = self.person_name
         output['office_name'] = self.assign_officeroom(all_offices)
+        self.add_person_to_db('staff', output['office_name'], None)
+
         return output
 
     def assign_officeroom(self, all_officerooms):
@@ -71,13 +80,18 @@ class Staff(Person):
                 room_name = officeroom.room_name
             else:
                 all_officerooms_list = all_officerooms_list.remove(officeroom)
-                room_name = self.assign_officeroom(all_officerooms_list) 
+                room_name = self.assign_officeroom(all_officerooms_list)
         return room_name
         
 
 class Room(object):
     def __init__(self, room_name):
         self.room_name = room_name
+
+    #Adds a room names and room_type  to the the table room
+    def add_room_to_db(self, room_type):
+        db = Database()
+        db.add_room(self.room_name, room_type)
 
 
 class Office(Room):

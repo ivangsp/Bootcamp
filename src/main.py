@@ -17,12 +17,20 @@ class Dojo():
 
         #if room_type is office then call the office instance
         if room_type == 'office':
+            #create room office
             office = Office(room_name)
+            #add that office to the database
+            office.add_room_to_db(room_type)
+            
             self.all_offices.append(office)
             self.all_rooms.append(office)
             output = True
         else:
+            #create room livingroom
             livingroom = LivingRoom(room_name)
+            #Add livingroom to the database
+            livingroom.add_room_to_db(room_type)
+
             self.all_living_rooms.append(livingroom)
             self.all_rooms.append(livingroom)
             output = True

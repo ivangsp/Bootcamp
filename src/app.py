@@ -22,6 +22,7 @@ Options:
 """
 
 import sys
+import os
 import cmd
 from docopt import docopt, DocoptExit
 from dojo import Dojo

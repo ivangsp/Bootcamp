@@ -45,8 +45,6 @@ class Validation():
                 arg = arg.lower()
                 if arg == 'yes':
                     return True
-                else:
-                    return False
         return False
 
     #check if person name entered is a string and not empty
@@ -60,7 +58,4 @@ class Validation():
                 raise TypeError()
         else:
             raise TypeError()
-
-
-
 
