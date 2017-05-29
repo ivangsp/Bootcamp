@@ -1,4 +1,4 @@
-from create_db import Database
+from db import Database
 
 
 class Person(object):

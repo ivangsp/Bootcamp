@@ -7,11 +7,11 @@ class Validation():
                 if room_type == "office" or room_type == "livingroom":
                     return room_type
                 else:
-                    raise ValueError()
+                    raise ValueError('Invalid values, room type should either be an office or liviningspace')
             else:
-                raise TypeError()
+                raise TypeError('room_type can only be a string')
         else:
-            raise TypeError()
+            raise TypeError('room_type can not be empty')
 
     #check if room name entered is a string and not empty
     def check_room_name(self, room_name):
@@ -33,7 +33,7 @@ class Validation():
                 if person_type == "fellow" or person_type == "staff":
                     return person_type
                 else:
-                    raise ValueError()
+                    raise ValueError('invalid person type, should either be a fellow or staff')
             else:
                 raise TypeError()
         else:
@@ -43,7 +43,7 @@ class Validation():
         if arg is not None:
             if isinstance(arg, str):
                 arg = arg.lower()
-                if arg == 'yes':
+                if arg == 'y':
                     return True
         return False
 
