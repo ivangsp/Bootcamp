@@ -9,6 +9,7 @@ Usage:
      dojo.py print_room <room_name>
      dojo.py print_allocations [<filename>]
      dojo.py print_unallocated [<filename>]
+     dojo.py reallocate_person <person_identifier> <new_room_name>
      dojo.py load_people [<filename>]
      dojo.py (-h | --help)
 
@@ -25,7 +26,7 @@ Options:
 import sys
 import cmd
 from docopt import docopt, DocoptExit
-from src.main import Dojo
+from dojo.src.main import Dojo
 
 mydojo = Dojo()
 
@@ -77,13 +78,13 @@ class DojoCLI(cmd.Cmd):
         """Usage: create_room <room_type> <room_name>... """
 
         room_type = args['<room_type>']
-        list_room_names = args['<room_name>']
-        for room in list_room_names:
-            if mydojo.create_room(room_type, room):
-
+        room_names = args['<room_name>']
+        #for room in list_room_names:
+        if mydojo.create_room(room_type, room_names):
+            for room in room_names:
                 print("An {} called {} has been successfully created!".format(room_type, room))
-            else:
-                print 'Oops,an error occured'
+        else:
+            print('Oops,an error occured, check the room')
 
      #adds a person to a random room     
     @docopt_cmd
@@ -91,18 +92,28 @@ class DojoCLI(cmd.Cmd):
 
         """Usage: add_person <first_name> <second_name> <FELLOW-STAFF> [<wants_accommodation>]
         """
-        person_name = args['<first_name>']+ " "+ args['<second_name>']
+        first_name = args['<first_name>']
+        second_name = args['<second_name>'] 
         person_type = args['<FELLOW-STAFF>']
+        person_name = first_name +" "+second_name
         wants_accommodation = args['<wants_accommodation>']
-        output = mydojo.add_person(person_name, person_type, wants_accommodation)
+        output = mydojo.add_person(first_name, second_name, person_type, wants_accommodation)
         office_name = output['office_name']
         living_room = output['livingroom']
-        print("{}, {} has been successfully added.".format(person_type, person_name))
-        print("{}, has been allocated office {} ".format(person_name, office_name))
+
+        if office_name is not None or office_name != 'yes':
+            print("{}, {} has been successfully added.".format(person_type, person_name))
+            print("{}, has been allocated office {} ".format(person_name, office_name))
+
+        else:
+            print("sorry currently all offices are full")
 
         if person_type == "fellow":
-            if living_room is not None:
+            if living_room is not None or living_room != 'yes':
                 print("{}, has been allocated livingroom {} ".format(person_name, living_room))
+            elif living_room == 'yes':
+                print("sorry currently all livingrooms are full")
+        
      
     @docopt_cmd
     def do_print_room(self, args):
@@ -117,12 +128,12 @@ class DojoCLI(cmd.Cmd):
 
         else:
             if len(result) == 0:
-                print 'The room is still empty'
+                print('The room is still empty')
             else:
                 print ('The following people are in {}'.format(room_name))
                 print ('****************************************************')
                 for row in result:
-                    print row[0]
+                    print (row[0])
 
     #prints a list of people with the rooms allocated to them
     @docopt_cmd
@@ -130,24 +141,25 @@ class DojoCLI(cmd.Cmd):
         """Usage: print_allocations [<filename>]
         """
         filename = args['<filename>']
-        result = mydojo.print_allocated_rooms(filename)
-        if filename is None:     
-            for i in result:
-                for k, v in i.iteritems():
-                    print k
-                    for j in v:
-                        print j
-        else:
-            filename = filename+'.txt'
-            saveFile = open(filename,'w')
-            for i in result:
-                for k, v in i.iteritems():
-                    saveFile.write(k+'\n')
-                    saveFile.write('-------------------------------------\n')
-                    for j in v:
-                       saveFile.write(j+', ')
+        mydojo.print_allocated_rooms(filename)
+        #result = mydojo.print_allocated_rooms(filename)
+        # if filename is None:     
+        #     for i in result:
+        #         for k, v in i.iteritems():
+        #             print(k)
+        #             for j in v:
+        #                 print(j)
+        # else:
+        #     #filename = filename+'.txt'
+        #     saveFile = open(filename,'w')
+        #     for i in result:
+        #         for k, v in i.iteritems():
+        #             saveFile.write(k+'\n')
+        #             saveFile.write('-------------------------------------\n')
+        #             for j in v:
+        #                saveFile.write(j+', ')
 
-                    saveFile.write('\n')
+        #             saveFile.write('\n')
             
 
    #prints a list of people with the rooms allocated to them
@@ -156,17 +168,26 @@ class DojoCLI(cmd.Cmd):
         """Usage: print_unallocated [<filename>]
         """
         filename = args['<filename>']
-        result = mydojo.print_unallocated_people(filename)
+        mydojo.print_unallocated_people(filename)
+        # result = mydojo.print_unallocated_people(filename)
+        # if filename is None:
+        #     for name in result:
+        #         print (name)
+        # else:
+        #     saveFile = open(filename,'w')
+        #     saveFile.write('The following people were not allocated rooms \n')
+        #     saveFile.write('-------------------------------------\n')
+        #     for name in result:
+        #         saveFile.write(name+', \n')
 
-        if filename is None:
-            for name in result:
-                print name
-        else:
-            saveFile = open(filename,'w')
-            saveFile.write('The following people were not allocated rooms \n')
-            saveFile.write('-------------------------------------\n')
-            for name in result:
-                saveFile.write(name+', \n')
+    # @docopt_cmd
+    def do_reallocate_person(self, args):
+        """Usage: reallocate_person <person_identifier> <new_room_name> """
+
+        person_name =args['<person_identifier>']
+        new_room_name = args['<new_room_name>']
+        result = mydojo.reallocate_person(person_name, new_room_name)
+        print(result)
 
     @docopt_cmd
     def do_load_people(self, args):

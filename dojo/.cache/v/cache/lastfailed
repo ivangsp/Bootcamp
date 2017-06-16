@@ -1,0 +1,9 @@
+{
+  "test/test_dojo.py::Test_Dojo::test_create_room_successfully": true,
+  "test/test_dojo.py::Test_Dojo::test_if_filename_ends_with_txt_in_print_allocations_method": true,
+  "test/test_dojo.py::Test_Dojo::test_if_filename_ends_with_txt_in_print_unallocated_method": true,
+  "test/test_dojo.py::Test_Dojo::test_if_person_is_not_assigned_livingroom_if_did_not_request_for_it": true,
+  "test/test_dojo.py::Test_Dojo::test_if_room_name_is_still_empty_in_print_room_method": true,
+  "test/test_dojo.py::Test_Dojo::test_multiple_livingspaces_are_created_successfully": true,
+  "test/test_dojo.py::Test_Dojo::test_multiple_offices_created_successfully": true
+}
