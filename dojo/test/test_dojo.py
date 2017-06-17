@@ -49,16 +49,15 @@ class Test_Dojo(unittest.TestCase):
         self.assertRaises(ValueError, self.dojo.add_person, 'Isaac', 'A', 'staf')
 
     #test if person name already exists
-    # def test_person_name_does_not_exist(self):
-    #     self.dojo.add_person('gsp', 'ivan', 'fellow', 'y')
-    #     self.dojo.add_person('Allan', 'W', 'staff')
-    #     self.assertRaises(IntegrityError, self.dojo.add_person, 'Allan', 'W','staff')
-    #     self.assertRaises(IntegrityError, self.dojo.add_person, 'gsp', 'ivan', 'fellow','y')
+    def test_person_name_does_not_exist(self):
+        self.dojo.add_person('Davies', 'ivan', 'fellow', 'y')
+        self.dojo.add_person('Allan', 'W', 'staff')
+        self.assertRaises(ValueError, self.dojo.add_person, 'Allan', 'W','staff')
+        self.assertRaises(ValueError, self.dojo.add_person, 'gsp', 'ivan', 'fellow','y')
 
     #test if accomodation is either yes or No
     def test_if_accomodation_is_either_y_or_N(self):
         self.assertRaises(ValueError, self.dojo.add_person, 'john', 'W' , 'fellow','yap')
-
 
     #test if add_person is successfull
     def test_add_person_successfull(self):
@@ -76,6 +75,7 @@ class Test_Dojo(unittest.TestCase):
 
     #test_if_person_is_assigned_a livingspace
     def test_if_person_is_assigned_livingspace(self):
+        self.dojo.create_room('livingroom', 'DJANGO')
         fellow = self.dojo.add_person('geofrey', 'w', 'fellow','y')
         livingroom = fellow['livingroom']
         livingspace_available = self.dojo.all_living_rooms
@@ -101,21 +101,20 @@ class Test_Dojo(unittest.TestCase):
         livingroom =staff['livingroom']
         self.assertEqual(livingroom, None)
 
-
     #test if it throws ValueError if room name does not exists in print_room method
     def test_if_room_name_exists(self):
         self.assertRaises(ValueError, self.dojo.print_people_in_room, 'redvb')
 
     #test if room name is still empty in print room method
     def test_if_room_name_is_still_empty_in_print_room_method(self):
-        self.dojo.create_room('office', 'Java')
-        output = self.dojo.print_people_in_room('java')
+        self.dojo.create_room('office', ['Java'])
+        output = self.dojo.print_people_in_room('Java')
         self.assertEqual(len(output), 0)
 
     #test_if_filename_ends_with_txt_in_print_allocations_methods
     def test_if_filename_ends_with_txt_in_print_allocations_method(self):
-        self.assertRaises(ValueError, self.dojo.print_allocated_rooms)
+        self.assertRaises(ValueError, self.dojo.print_allocated_rooms, 'example.php')
 
     #test_if_filename_ends_with_txt_in_print_unallocated_methods
     def test_if_filename_ends_with_txt_in_print_unallocated_method(self):
-        self.assertRaises(ValueError, self.dojo.print_unallocated_people)
+        self.assertRaises(ValueError, self.dojo.print_unallocated_people, 'file1.vat')

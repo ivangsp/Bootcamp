@@ -16,12 +16,13 @@ class Staff(Person):
         super(Person, self).__init__()
         self.person_name = person_name
         self.db = Database()
+        self.all_offices = self.db.get_all_rooms_by_roomtype('office')
 
     #adds staff to the database and assigns him a room
     def add_staff(self):
         output = {}
         output['person_name'] = self.person_name
-        output['office_name'] = self.assign_officeroom(self.db.get_all_rooms_by_roomtype('office'))
+        output['office_name'] = self.assign_officeroom(self.all_offices)
         output['livingroom'] = None
         self.add_person_to_db('staff', output['office_name'], None)
         return output
@@ -29,7 +30,7 @@ class Staff(Person):
     def assign_officeroom(self, all_officerooms):
         all_officerooms_list = all_officerooms
         room_name = " "
-        if all_officerooms_list == None:
+        if len(all_officerooms_list) == 0:
             room_name = 'yes'
         else:
             officeroom = random.choice(all_officerooms_list)

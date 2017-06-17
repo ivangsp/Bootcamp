@@ -59,13 +59,18 @@ class Database():
 
     
     #get current number of occupants
-    def get_people_in_room_name(self,room_name):
+    def get_people_in_room(self,room_name=''):
 
         try:
-            cursor1.execute("SELECT person_name, office_name, livingroom_name FROM person WHERE office_name=? OR livingroom_name=?", (room_name,room_name,))
+            output = []
+            if len(room_name)>0:
+                cursor1.execute("SELECT person_name, office_name, livingroom_name FROM person WHERE office_name=? OR livingroom_name=?", (room_name,room_name,))
+            else:
+                cursor1.execute("SELECT person_name, office_name, livingroom_name FROM person ")
             data = cursor1.fetchall() 
-            #cursor1.fetchall()
-            return data
+            for person in data:
+                output.append(person[0])
+            return output
 
         except sqlite3.IntegrityError:
             conn.rollback()

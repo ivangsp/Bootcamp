@@ -32,6 +32,7 @@ class Fellow(Person):
             output['person_name'] = self.person_name
             output['office_name'] = office_name
             output['person_type'] = 'fellow'
+            output['livingroom'] = None
         else:
             output['office_name'] = None
 
@@ -39,9 +40,7 @@ class Fellow(Person):
         if self.accomodation:
             livingspaceroom = self.assign_livingroom(self.all_livingrooms)
             if livingspaceroom:
-                output['livingroom'] = livingspaceroom
-            else:
-                output['livingroom'] = None
+                output['livingroom'] = livingspaceroom       
         #check if output is not empty:
         if output:
             self.add_person_to_db('fellow', output['office_name'], output['livingroom'])
@@ -51,7 +50,7 @@ class Fellow(Person):
     def assign_livingroom(self, all_livingrooms):
         all_livingrooms_list = all_livingrooms
         room_name = " "
-        if all_livingrooms_list == None:
+        if len(all_livingrooms_list) == 0 :
             room_name = 'yes'
             return room_name
         else:
@@ -72,7 +71,7 @@ class Fellow(Person):
         room_name = " "
 
         #check if the list containing all offices' names is not empty
-        if all_officerooms_list == None:
+        if not all_officerooms_list:
             room_name = 'yes'
         else:
             office_room = random.choice(all_officerooms_list)

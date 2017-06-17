@@ -97,18 +97,18 @@ class Dojo():
             raise ValueError('OOps.., {} {}does not exist'.format(room_name, room_name_exists))
 
         else:
-            result = self.db.get_people_in_room_name(room_name)
+            result = self.db.get_people_in_room(room_name)
             return result
             
 
-    def print_allocated_rooms(self, filename=None):
+    def print_allocated_rooms(self, filename=''):
         people_in_office = self.db.allocated_office_rooms()
         people_in_livingspace = self.db.allocated_livingspace_rooms()
 
         #combine the 2 dictinaries together
         result = {**people_in_office, **people_in_livingspace}
         #check if filname is not given, then just print d allocations on the screen
-        if filename is None:     
+        if len(filename) == 0:     
             for k, v in result.iteritems():
                 print(k)
                 for j in v:
@@ -116,7 +116,7 @@ class Dojo():
         else:
             #check if filename ends with .txt
             #filename = filename+'.txt'
-            if filename.lower.endswith('.txt'):
+            if filename.lower().endswith('.txt'):
                 saveFile = open(filename,'w')
                 for k, v in result.iteritems():
                     saveFile.write(k+'\n')
@@ -129,15 +129,15 @@ class Dojo():
 
         
     #people who did not get either livingspaces or offices
-    def print_unallocated_people(self,filename=None):
+    def print_unallocated_people(self,filename=''):
         result = self.db.get_people_who_missed_rooms()
-        if filename is None:
+        if len(filename) == 0:
             for name in result:
                 print (name)
         else:
             #check if filename ends with .txt
             #filename = filename+'.txt'
-            if filename.lower.endswith('.txt'):
+            if filename.lower().endswith('.txt'):
                 saveFile = open(filename,'w')
                 saveFile.write('The following people were not allocated rooms \n')
                 saveFile.write('-------------------------------------\n')

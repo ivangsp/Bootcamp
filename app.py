@@ -101,18 +101,20 @@ class DojoCLI(cmd.Cmd):
         office_name = output['office_name']
         living_room = output['livingroom']
 
-        if office_name is not None or office_name != 'yes':
-            print("{}, {} has been successfully added.".format(person_type, person_name))
-            print("{}, has been allocated office {} ".format(person_name, office_name))
+        print(output)
 
-        else:
-            print("sorry currently all offices are full")
+        # if office_name is not None or office_name != 'yes':
+        #     print("{}, {} has been successfully added.".format(person_type, person_name))
+        #     print("{}, has been allocated office {} ".format(person_name, office_name))
 
-        if person_type == "fellow":
-            if living_room is not None or living_room != 'yes':
-                print("{}, has been allocated livingroom {} ".format(person_name, living_room))
-            elif living_room == 'yes':
-                print("sorry currently all livingrooms are full")
+        # else:
+        #     print("sorry currently all offices are full")
+
+        # if person_type == "fellow":
+        #     if living_room is not None or living_room != 'yes':
+        #         print("{}, has been allocated livingroom {} ".format(person_name, living_room))
+        #     elif living_room == 'yes':
+        #         print("sorry currently all livingrooms are full")
         
      
     @docopt_cmd

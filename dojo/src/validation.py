@@ -1,4 +1,10 @@
+from dojo.src.db import Database
+
 class Validation():
+
+    def __init__(self):
+        self.db = Database()
+
     def check_room_type(self, room_type):
         #check if arg person_type is not empty
         if room_type is not None:
@@ -60,7 +66,11 @@ class Validation():
         if person_name is not None:
             #check if its a string
             if isinstance(person_name, str):
-                return person_name
+                #check if person name already exists
+                if person_name in self.db.get_people_in_room():
+                    raise ValueError('Ooops, {} already exists')
+                else:
+                    return person_name
             else:
                 raise TypeError()
         else:
