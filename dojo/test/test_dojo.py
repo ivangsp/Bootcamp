@@ -75,7 +75,7 @@ class Test_Dojo(unittest.TestCase):
 
     #test_if_person_is_assigned_a livingspace
     def test_if_person_is_assigned_livingspace(self):
-        self.dojo.create_room('livingroom', 'DJANGO')
+        self.dojo.create_room('livingroom', ['DJANGO'])
         fellow = self.dojo.add_person('geofrey', 'w', 'fellow','y')
         livingroom = fellow['livingroom']
         livingspace_available = self.dojo.all_living_rooms
@@ -118,3 +118,23 @@ class Test_Dojo(unittest.TestCase):
     #test_if_filename_ends_with_txt_in_print_unallocated_methods
     def test_if_filename_ends_with_txt_in_print_unallocated_method(self):
         self.assertRaises(ValueError, self.dojo.print_unallocated_people, 'file1.vat')
+
+    #test_if_throws_error_if_person_doesnot_exist
+    def test_if_throws_error_if_person_doesnot_exist(self):
+        self.dojo.add_person('Winnie', 'E', 'staff')
+        self.dojo.create_room('office', ['green'])
+        self.dojo.create_room('livingroom', ['Ruby'])
+        self.assertRaises(ValueError, self.dojo.reallocate_person, 'Winnie', 'er','green')
+        self.assertRaises(ValueError, self.dojo.reallocate_person, 'Winnie', 'er','Ruby')
+
+    #test_if_throws_error_if_room_name_doesnot_exist
+    def test_if_throws_error_if_room_name_doesnot_exist(self):
+        self.dojo.add_person('Isaac', 'R', 'staff')
+        self.assertRaises(ValueError, self.dojo.reallocate_person, 'Isaac', 'R','green1')
+        self.assertRaises(ValueError, self.dojo.reallocate_person, 'Isaac', 'R','Ruby1')
+
+    #test if person reallocated_sucessfully
+    def test_if_person_reallocates_sucessfully(self):
+        self.dojo.add_person('Mukibi','D','fellow','y')
+        self.dojo.create_room('livingroom',['RoomB'])
+        self.assertEqual(self.dojo.reallocate_person('Mukibi', 'D','RoomB'), None)

@@ -1,17 +1,7 @@
-# from person import Person
-# from office import Office
-# from livingroom import LivingRoom
-# import random
-# from db import Database
-
 from dojo.src.person import Person
-from dojo.src.office import Office
 from dojo.src.livingroom import LivingRoom
 import random
 from dojo.src.db import Database
-
-
-
 
 class Fellow(Person):
     def __init__(self, person_name):
@@ -65,22 +55,4 @@ class Fellow(Person):
                 room_name = self.assign_livingroom(all_livingrooms_list)
         return room_name
 
-    #assign an office to either a staff or a fellow
-    def assign_officeroom(self, all_officerooms):
-        all_officerooms_list = all_officerooms
-        room_name = " "
-
-        #check if the list containing all offices' names is not empty
-        if not all_officerooms_list:
-            room_name = 'yes'
-        else:
-            office_room = random.choice(all_officerooms_list)
-            office = Office(office_room)
-            if office.has_space_office():
-                room_name = office_room
-            else:
-                all_officerooms_list = all_officerooms_list.remove(office_room)
-                room_name = self.assign_officeroom(all_officerooms_list)
-                
-        return room_name
-    
+   

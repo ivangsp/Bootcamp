@@ -1,10 +1,3 @@
-# from validation import Validation
-# from livingroom import LivingRoom
-# from office import Office
-# from fellow import Fellow
-# from staff import Staff
-# from db import Database
-
 from dojo.src.validation import Validation
 from dojo.src.fellow import Fellow
 from dojo.src.office import Office
@@ -75,6 +68,9 @@ class Dojo():
         person_name = self.validate.check_person_name(first_name, second_name)
         person_type = self.validate.check_personType(person_type)
         accomodation = self.validate.check_accomdoation(accomodation)
+
+        #check if person does not exists
+        person_name = self.validate.check_if_person_does_not_exist(person_name)
 
         #if person_type is fellow, then call the Fellow class
         if person_type == "fellow":
@@ -147,33 +143,68 @@ class Dojo():
                 raise ValueError('Incorrect filename')
 
     #
-    def reallocate_person(self,person_name, room_name):
+    def reallocate_person(self,first_name,second_name, room_name):
 
         room_name = self.validate.check_room_name(room_name)
-        person_name = self.validate.check_person_name(person_name)
+        person_name = self.validate.check_person_name(first_name, second_name)
 
-        #check fist if room name exists
-        room_details = self.db.check_if_room_exists(room_name)
-        if room_details is not None:
-            room_type = room_details[0]
+        #check if person already exists
+        all_people = self.db.get_people_in_room()
+        if person_name in all_people:
 
-            people_in_room = self.db.get_people_in_room_name(room_name)
-            #check if the room is an office
-            #check if its full
+            #check if room name exists
+            room_type = self.db.check_if_room_exists(room_name)
+            if room_type is not None:
+                people_in_room = self.db.get_people_in_room(room_name)
+                #check if the room is an office
+                #check if its full
+                if people_in_room is not None and len(people_in_room)==6 and room_type == "office":
+                    return( "An Office {} is already full".format(room_name))
 
-            if people_in_room is not None and len(people_in_room)==6 and room_type == "office":
-                return( "An Office {} is already full".format(room_name))
+                #check if the room is a livingspace
+                #check if its full
+                elif people_in_room is not None and len(people_in_room) ==4 and room_type == "livingroom":
+                    return("Livingspace {} is already full".format(room_name))
+                #if the room is not full
+                #then reallocate the person to that room
+                return (self.db.update_person_details(person_name, room_name, room_type))
+            else:
+                raise ValueError('Ooops, {} does not exist'.format(room_name))
 
-            #check if the room is a livingspace
-            #check if its full
-            elif len(self.db.get_people_in_room_name(room_name))==4 and room_type == "livingroom":
-                return("Livingspace {} is already full".format(room_name))
-            #if the room is not full
-            #then reallocate the person to that room
-            return (self.db.update_person_details(person_name, room_name, room_type))
-            return output
         else:
-            return ('oops, {} does not exist,'.format(room_name))
+            raise ValueError('{}, does not exist'.format(person_name))
+
+    #load_people from file
+    def load_people_from_file(self):
+        #check if file exists
+        #to be implmented here
+        readMe = open('example.txt','r').readlines()
+        for person in readMe:
+            result = person.split()
+            wants_accommodation = None
+            fname = result[0]
+            sname = result[1]
+            person_type =result[2]
+
+            if len(result) >3:
+                wants_accommodation =result[3]
+
+            person_name = fname + " "+sname
+            output = mydojo.add_person(person_name, person_type, wants_accommodation)
+            office_name = output['office_name']
+            living_room = output['livingroom']
+            print("{}, {} has been successfully added.".format(person_type, person_name))
+            print("{}, has been allocated office {} ".format(person_name, office_name.split()))
+
+            if person_type == "fellow":
+                if living_room is not None or living_room !='yes':
+                    print("{}, has been allocated livingroom {} ".format(person_name, living_room))
+                elif living_room =='yes':
+                    print("There currently no livingspaces availeabe, {}, was not allocated livingspace ".format(person_name))
+
+
+
+         
 
         
 

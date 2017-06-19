@@ -1,6 +1,3 @@
-# from room import Room
-# from db import Database
-
 from dojo.src.room import Room 
 from dojo.src.db import Database
 

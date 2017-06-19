@@ -49,9 +49,10 @@ class Database():
             output = []
             cursor1.execute("SELECT room_name FROM rooms WHERE room_type=?", (room_type,))
             data = cursor1.fetchall()
-            for room in data:
-                output.append(room[0])
-            return output
+            if data is not None:
+                for room in data:
+                    output.append(room[0])
+                return output
 
         except sqlite3.IntegrityError:
             conn.rollback()
@@ -81,7 +82,8 @@ class Database():
         try:
             cursor1.execute("SELECT room_type FROM rooms WHERE room_name=?",  (room_name,))
             data = cursor1.fetchone()
-            return data
+            if data is not None:
+                return data[0]
 
         except sqlite3.IntegrityError:
             conn.rollback()
@@ -103,6 +105,7 @@ class Database():
 
         except sqlite3.Error:
             print('There was a problem with SQL')
+
 
     def allocated_livingspace_rooms(self):
         try:
@@ -136,16 +139,15 @@ class Database():
 
     #reallocated person from one room ro another
     def update_person_details(self, person_name, room_name, room_type):
-        personname = '%'+person_name +'%'
+        #personname = '%'+person_name +'%'
         try:
             if room_type =='office':
-                cursor1.execute("UPDATE person SET office_name=? WHERE person_name LIKE ? ",(room_name, personname))
-                cursor1.commit
+                cursor1.execute("UPDATE person SET office_name=? WHERE person_name=? ",(room_name, person_name))
+                conn.commit()
                 #return(cursor1.fetchall())
             else:
-                cursor1.execute("UPDATE person SET livingroom_name=? WHERE person_name LIKE ?",(room_name, personname))
-                cursor1.commit
-                #return(cursor1.fetchall())
+                cursor1.execute("UPDATE person SET livingroom_name=? WHERE person_name=?",(room_name, person_name))
+                conn.commit()
 
         except sqlite3.Error:
             print('There was a problem with SQL')

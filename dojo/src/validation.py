@@ -60,19 +60,23 @@ class Validation():
         return False
 
     #check if person name entered is a string and not empty
-    def check_person_name(self, first_name, second_name):
+    def check_person_name(self, first_name, second_name=''):
         #check if room name  is not empty
         person_name = first_name+" "+second_name
         if person_name is not None:
             #check if its a string
             if isinstance(person_name, str):
-                #check if person name already exists
-                if person_name in self.db.get_people_in_room():
-                    raise ValueError('Ooops, {} already exists')
-                else:
-                    return person_name
+                return person_name
             else:
                 raise TypeError()
         else:
             raise TypeError()
+
+    #check if person name already exists
+    def check_if_person_does_not_exist(self, person_name):
+        if person_name in self.db.get_people_in_room():
+            raise ValueError('Ooops, {} already exists')
+        else:
+            return person_name
+
 
