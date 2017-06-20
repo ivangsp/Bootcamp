@@ -77,14 +77,19 @@ class DojoCLI(cmd.Cmd):
     def do_create_room(self, args):
         """Usage: create_room <room_type> <room_name>... """
 
-        room_type = args['<room_type>']
-        room_names = args['<room_name>']
-        #for room in list_room_names:
-        if mydojo.create_room(room_type, room_names):
-            for room in room_names:
-                print("An {} called {} has been successfully created!".format(room_type, room))
-        else:
-            print('Oops,an error occured, check the room')
+        try:
+            room_type = args['<room_type>']
+            room_names = args['<room_name>']
+            #for room in list_room_names:
+            if mydojo.create_room(room_type, room_names):
+                for room in room_names:
+                    print("An {} called {} has been successfully created!".format(room_type, room))
+            else:
+                print('Oops,an error occured, check the room')
+
+        except Exception as err:
+            print(err.__str__())
+
 
      #adds a person to a random room     
     @docopt_cmd
@@ -97,36 +102,40 @@ class DojoCLI(cmd.Cmd):
         person_type = args['<FELLOW-STAFF>']
         person_name = first_name +" "+second_name
         wants_accommodation = args['<wants_accommodation>']
-        output = mydojo.add_person(first_name, second_name, person_type, wants_accommodation)
-        office_name = output['office_name']
-        living_room = output['livingroom']
+        try:
 
-        if office_name is not None or office_name != 'yes':
-            print("{}, {} has been successfully added.".format(person_type, person_name))
-            print("{}, has been allocated office {} ".format(person_name, office_name))
-
+            output = mydojo.add_person(first_name, second_name, person_type, wants_accommodation)
+        except Exception as err:
+            print(err.__str__())
         else:
-            print("sorry currently all offices are full")
+            office_name = output['office_name']
+            living_room = output['livingroom']
 
-        if person_type == "fellow":
-            if living_room is not None or living_room != 'yes':
-                print("{}, has been allocated livingroom {} ".format(person_name, living_room))
-            elif living_room == 'yes':
-                print("sorry currently all livingrooms are full")
-        
-     
+            if office_name != 'yes':
+                print("{}, {} has been successfully added.".format(person_type, person_name))
+                print("{}, has been allocated office {} ".format(person_name, office_name))
+
+            else:
+                print("sorry currently all offices are full")
+
+            if person_type == "fellow":
+                if living_room != 'yes' and  living_room is not None:
+                    print("{}, has been allocated livingroom {} ".format(person_name, living_room))
+                elif living_room =='yes':
+                    print("sorry currently all livingrooms are full")
+    
+            
     @docopt_cmd
     def do_print_room(self, args):
         """Usage: print_room <room_name>
         """
         room_name = args["<room_name>"]
-        result = mydojo.print_people_in_room(room_name)
-
-        #check if room name exists
-        if result is None:
-            print ('sorry, No room name with the name {}'.format(room_name))
-
+        try:
+            result = mydojo.print_people_in_room(room_name)
+        except Exception as err:
+            print(err.__str__())
         else:
+
             if len(result) == 0:
                 print('The room is still empty')
             else:
@@ -141,7 +150,10 @@ class DojoCLI(cmd.Cmd):
         """Usage: print_allocations [<filename>]
         """
         filename = args['<filename>']
-        mydojo.print_allocated_rooms(filename)    
+        try:
+            mydojo.print_allocated_rooms(filename) 
+        except Exception as err:
+            print(err.__str__())   
 
    #prints a list of people with the rooms allocated to them
     @docopt_cmd
@@ -149,8 +161,11 @@ class DojoCLI(cmd.Cmd):
         """Usage: print_unallocated [<filename>]
         """
         filename = args['<filename>']
-        mydojo.print_unallocated_people(filename)
-
+        try:
+            mydojo.print_unallocated_people(filename)
+        except Exception as err:
+            print(err.__str__())
+       
     #reallocate person from one room to another   
     @docopt_cmd
     def do_reallocate_person(self, args):
@@ -159,14 +174,19 @@ class DojoCLI(cmd.Cmd):
         first_name = args['<first_name>']
         second_name = args['<second_name>']
         new_room_name = args['<new_room_name>']
-        result = mydojo.reallocate_person(first_name, second_name, new_room_name)
-        print(result)
+        try:
+            result = mydojo.reallocate_person(first_name, second_name, new_room_name)
+        except Exception as err:
+            print(err.__str__())
+        else:
+            print(result)
 
     #load people from a file
     @docopt_cmd
     def do_load_people(self, args):
         """Usage: load_people [<filename>]
         """
+        #to be implemented
         mydojo.load_people_from_file()
 
     def do_quit(self, arg):
