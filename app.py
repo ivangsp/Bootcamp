@@ -11,6 +11,8 @@ Usage:
      dojo.py print_unallocated [<filename>]
      dojo.py reallocate_person <first_name> <second_name> <new_room_name>
      dojo.py load_people [<filename>]
+     dojo.py delete_person <first_name> <second_name>
+     dojo.py delete_room <room_name>
      dojo.py (-h | --help)
 
 Options:
@@ -142,7 +144,7 @@ class DojoCLI(cmd.Cmd):
                 print ('The following people are in {}'.format(room_name))
                 print ('****************************************************')
                 for row in result:
-                    print (row[0])
+                    print (row)
 
     #prints a list of people with the rooms allocated to them
     @docopt_cmd
@@ -151,18 +153,25 @@ class DojoCLI(cmd.Cmd):
         """
         filename = args['<filename>']
         try:
-            mydojo.print_allocated_rooms(filename) 
+            if filename is not None:
+                mydojo.print_allocated_rooms(filename) 
+            else:
+               mydojo.print_allocated_rooms() 
         except Exception as err:
             print(err.__str__())   
 
-   #prints a list of people with the rooms allocated to them
+   #prints a list of people who were not allocated rooms
     @docopt_cmd
     def do_print_unallocated(self, args):
         """Usage: print_unallocated [<filename>]
         """
         filename = args['<filename>']
+
         try:
-            mydojo.print_unallocated_people(filename)
+            if filename is not None:
+                mydojo.print_unallocated_people(filename)
+            else:
+                mydojo.print_unallocated_people()
         except Exception as err:
             print(err.__str__())
        
@@ -188,6 +197,26 @@ class DojoCLI(cmd.Cmd):
         """
         #to be implemented
         mydojo.load_people_from_file()
+
+    @docopt_cmd
+    def do_delete_person(self, args):
+        """Usage: delete_person <first_name> <second_name> """
+        first_name = args['<first_name>']
+        second_name = args['<second_name>']
+        try:
+            print(mydojo.delete_person(first_name, second_name))
+            
+        except Exception as e:
+            print(e.__str__())
+    @docopt_cmd
+    def do_delete_room(self, args):
+        """Usage: delete_room <room_name> """
+        room_name =args['<room_name>']
+        try:
+
+            print(mydojo.delete_room(room_name))
+        except Exception as e:
+            print(e.__str__())
 
     def do_quit(self, arg):
 

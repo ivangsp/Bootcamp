@@ -23,8 +23,6 @@ class Fellow(Person):
             output['office_name'] = office_name
             output['person_type'] = 'fellow'
             output['livingroom'] = None
-        else:
-            output['office_name'] = None
 
         #check if he wants accomodtion and assign a livingspace
         if self.accomodation:
@@ -40,7 +38,7 @@ class Fellow(Person):
     def assign_livingroom(self, all_livingrooms):
         all_livingrooms_list = all_livingrooms
         room_name = " "
-        if len(all_livingrooms_list) == 0 :
+        if all_livingrooms_list is None :
             room_name = 'yes'
             return room_name
         else:

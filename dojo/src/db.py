@@ -85,17 +85,16 @@ class Database():
             if data is not None:
                 return data[0]
 
-        except sqlite3.IntegrityError:
-            conn.rollback()
-            print('There was a problem with SQL')
-
+        except Exception as e:
+            raise e
+            
     def allocated_office_rooms(self):
         try:
             cursor1.execute("SELECT person_name, office_name FROM person WHERE office_name !=? AND office_name is NOT NULL", ('yes',))
             data = cursor1.fetchall()
             output ={}
             for row in data:
-                if output.has_key(row[1]):
+                if output.has_key(row[1]): #works only in python2.7
                     output[row[1]].append(row[0])
 
                 else:
@@ -151,3 +150,28 @@ class Database():
 
         except sqlite3.Error:
             print('There was a problem with SQL')
+
+    #delete person
+    def delete_person_from_db(self, person_name):
+        try:
+            cursor1.execute("DELETE  FROM person WHERE person_name=? ",(person_name,))
+            conn.commit()
+        except Exception as err:
+            raise err
+
+    #delete room
+    #update the person table
+    def delete_room_from_db(self,room_name, room_type):
+        try:
+            cursor1.execute("DELETE  FROM rooms WHERE room_name=? AND room_type=?",(room_name, room_type))
+            data = conn.commit()
+            if data is None:
+                if room_type == 'office':
+                    cursor1.execute("UPDATE person SET office_name=? WHERE office_name=? ",('yes',room_name))
+                    conn.commit()
+                else:
+                    cursor1.execute("UPDATE person SET livingroom_name=? WHERE livingroom_name=? ",('yes', room_name))
+                    conn.commit()
+
+        except Exception as err:
+            raise err

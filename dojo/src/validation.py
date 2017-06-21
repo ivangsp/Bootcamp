@@ -68,14 +68,14 @@ class Validation():
             if isinstance(person_name, str):
                 return person_name
             else:
-                raise TypeError()
+                raise TypeError('Your name shud be  alphabetic')
         else:
             raise TypeError()
 
     #check if person name already exists
     def check_if_person_does_not_exist(self, person_name):
         if person_name in self.db.get_people_in_room():
-            raise ValueError('Ooops, {} already exists')
+            raise ValueError('Ooops, {} already exists'.format(person_name))
         else:
             return person_name
 

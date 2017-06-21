@@ -19,6 +19,7 @@ class Dojo():
         room_type = self.validate.check_room_type(room_type)
         output = False
         for room in room_name:
+            #validating room name 
             room_name = self.validate.check_room_name(room)
 
             #if room_type is office then call the office instance
@@ -82,7 +83,7 @@ class Dojo():
         else:
             person = Staff(person_name)
             return(person.add_staff())
-
+   
     #prints names of people in aspecified room name
     def print_people_in_room(self, room_name):
         #validate room name
@@ -90,7 +91,7 @@ class Dojo():
         #check if room name entered exists
         room_name_exists = self.db.check_if_room_exists(room_name)
         if room_name_exists is None:
-            raise ValueError('OOps.., {} {}does not exist'.format(room_name, room_name_exists))
+            raise ValueError('OOps, {} room does not exist'.format(room_name))
 
         else:
             result = self.db.get_people_in_room(room_name)
@@ -121,7 +122,7 @@ class Dojo():
                        saveFile.write(j+', ')
                     saveFile.write('\n')
             else:
-                raise ValueError('Incorrect filename')
+                raise ValueError('Incorrect filename, filename shud end with .txt')
 
         
     #people who did not get either livingspaces or offices
@@ -169,7 +170,7 @@ class Dojo():
                 #then reallocate the person to that room
                 return (self.db.update_person_details(person_name, room_name, room_type))
             else:
-                raise ValueError('Ooops, {} does not exist'.format(room_name))
+                raise ValueError('Ooops, {} room does not exist'.format(room_name))
 
         else:
             raise ValueError('{}, does not exist'.format(person_name))
@@ -178,30 +179,64 @@ class Dojo():
     def load_people_from_file(self):
         #check if file exists
         #to be implmented here
-        readMe = open('example.txt','r').readlines()
-        for person in readMe:
-            result = person.split()
-            wants_accommodation = None
-            fname = result[0]
-            sname = result[1]
-            person_type =result[2]
+        try:
 
-            if len(result) >3:
-                wants_accommodation =result[3]
+            readMe = open('example.txt','r').readlines()
+        except Exception as err:
+            print(err.__str__())
+        else:
 
-            person_name = fname + " "+sname
-            output = mydojo.add_person(person_name, person_type, wants_accommodation)
-            office_name = output['office_name']
-            living_room = output['livingroom']
-            print("{}, {} has been successfully added.".format(person_type, person_name))
-            print("{}, has been allocated office {} ".format(person_name, office_name.split()))
+            for person in readMe:
+                result = person.split()
+                wants_accommodation = None
+                fname = result[0]
+                sname = result[1]
+                person_type =result[2]
 
-            if person_type == "fellow":
-                if living_room is not None or living_room !='yes':
-                    print("{}, has been allocated livingroom {} ".format(person_name, living_room))
-                elif living_room =='yes':
-                    print("There currently no livingspaces availeabe, {}, was not allocated livingspace ".format(person_name))
+                if len(result) >3:
+                    wants_accommodation =result[3]
 
+                person_name = fname + " "+sname
+                output = mydojo.add_person(person_name, person_type, wants_accommodation)
+                office_name = output['office_name']
+                living_room = output['livingroom']
+                print("{}, {} has been successfully added.".format(person_type, person_name))
+                print("{}, has been allocated office {} ".format(person_name, office_name.split()))
+
+                if person_type == "fellow":
+                    if living_room is not None or living_room !='yes':
+                        print("{}, has been allocated livingroom {} ".format(person_name, living_room))
+                    elif living_room =='yes':
+                        print("There currently no livingspaces availeabe, {}, was not allocated livingspace ".format(person_name))
+        
+    #add method for delete room
+    #delete person
+    def delete_person(self, first_name, second_name):
+        #validate person name
+        person_name = self.validate.check_person_name(first_name, second_name)
+        all_people = self.db.get_people_in_room()
+        #check if person name exits
+        if person_name in all_people:
+            if self.db.delete_person_from_db(person_name) is None:
+                return('Delted successfully')
+        else:
+            raise ValueError('Ooops, {} does not exist'.format(person_name))
+
+    #delete room
+    def delete_room(self,room_name):
+        #validate room  name
+        room_name = self.validate.check_room_name(room_name)
+        #check if room name exists
+        room_type = self.db.check_if_room_exists(room_name)
+        if room_type is None:
+            raise ValueError('Ooops, {} room does not exist'.format(room_name))
+        else:
+
+            #check if the room is deleted sucessfully
+            if self.db.delete_room_from_db(room_name, room_type) is None:
+                return('deleted sucessfully')
+            else:
+                return('Ooops, an error occured while deleting')
 
 
          
